@@ -1,0 +1,47 @@
+package pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import  org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class DropdownPage {
+
+    private WebDriver driver;
+    private By dropdown = By.id("dropdown");
+    public DropdownPage(WebDriver driver)
+    {
+        this.driver = driver;
+    }
+    public void selectFromDropDown(String option)
+    {
+
+     findDropDownElement().selectByVisibleText(option);
+
+    }
+    public List<String> getSelectedOption(){
+       List<WebElement> selectedElements =
+               findDropDownElement().getAllSelectedOptions();
+       return selectedElements.stream().map(e->e.getText()).collect(Collectors.toList());
+    }
+    private Select findDropDownElement()
+    {
+
+        return new Select(driver.findElement(dropdown));
+    }
+    public void selectVisibleTextInDropDownElement(WebDriver driver, WebElement element, String text){
+
+        WebDriverWait wait = new WebDriverWait(driver,20);
+        wait.until(ExpectedConditions.textToBePresentInElement(element, text));
+        Select s = new Select(element);
+        s.selectByVisibleText(text);
+
+    }
+
+}
